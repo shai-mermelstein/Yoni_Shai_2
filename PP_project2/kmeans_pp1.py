@@ -1,3 +1,6 @@
+import mykmeanssp
+
+from re import I
 import sys
 import numpy as np
 import pandas as pd
@@ -59,9 +62,12 @@ def main():
         if k >= numV:
             raise InvalidInput
         initial_centroids = kmeans_pp(vectors, numV, d, k)
+        res = vectors[initial_centroids]
 
         print(','.join(str(indices[j]) for j in initial_centroids))
-
+        assert mykmeanssp.fit(k, max_iter, epsilon, vectors, numV, d, res) == 0
+        for v in res: 
+            print(','.join(str(x) for x in v))
 
     except InvalidInput:
         sys.exit(INVALID_INPUT_MSG)
