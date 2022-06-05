@@ -19,7 +19,6 @@ typedef struct
 
 typedef struct
 {
-   bool           convergence_reached;
    double        *sum;
    unsigned short cluster_size;
 }info_4_convergence_t;
@@ -226,7 +225,7 @@ static double calc_distance(double *vector,double *centroid,unsigned short vecto
 {
    double dist = 0;
 
-   for(int i = 0;i <= vector_dim;i++)
+   for(int i = 0;i < vector_dim;i++)
    {
       dist += pow((vector[i]-centroid[i]),2);
    }
@@ -283,12 +282,11 @@ static bool update_centroids(
    for(int i = 0; i < vectors_num ; i++)
    {
       unsigned short idx = info_4_argmin[i].centriod_idx;
+      double *vector = get_element(vectors_array, i, vector_dim);
 
       for(int j=0; j< vector_dim;j++)
       {
-         double *vector = get_element(vectors_array, i, vector_dim);
          info_4_convergence[idx].sum[j] += vector[j];
-         print_all_vectors(centroids_array,centroids_num,vector_dim);
       }
       info_4_convergence[idx].cluster_size += 1;
    }
@@ -298,20 +296,29 @@ static bool update_centroids(
       for (int j = 0; j < vector_dim ; j++)
       {
          info_4_convergence[i].sum[j] = info_4_convergence[i].sum[j]/info_4_convergence[i].cluster_size;
-         print_all_vectors(centroids_array,centroids_num,vector_dim);
+         /*print_all_vectors(centroids_array,centroids_num,vector_dim);*/
       }
    }
 
    for (int i = 0;i < centroids_num ; i++)
    {
       double *centroid = get_element(centroids_array,i,vector_dim);
-      if (calc_distance(info_4_convergence[i].sum, centroid, vector_dim) > epsilon)
+      double distance = calc_distance(info_4_convergence[i].sum, centroid, vector_dim);
+      printf("distance[%d] = %f\r\n" ,i,distance);
+      if (distance > epsilon)
       {
+         printf("distance was smaller then epsilon\r\n");
          no_another_loop = false;
-         print_all_vectors(centroids_array,centroids_num,vector_dim);
+         
       }
-
+      print_all_vectors(centroids_array,centroids_num,vector_dim);
+      /*
+      copy the new centroids into centroids array
+      clear centroids info towards next loop 
+      */
       memcpy(centroid, info_4_convergence[i].sum, sizeof(double) * vector_dim);
+      memset(info_4_convergence[i].sum, 0, sizeof(double)*vector_dim);
+      info_4_convergence[i].cluster_size = 0;
    }
 
    return no_another_loop;
@@ -338,7 +345,7 @@ int main(void)
    double          vectors_array[4] = {1,2,3,4};
    unsigned short  vectors_num =4;
    unsigned short  vector_dim = 1;
-   double          centroids_array[2] = {1,4};
+   double          centroids_array[2] = {1,4}; 
 
    alg2(centroids_num,
         max_iter,
