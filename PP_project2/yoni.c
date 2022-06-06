@@ -73,12 +73,12 @@ print_all_vectors(
    unsigned short vector_dim);
 
 //mykmeanssp.fit(k, max_iter, epsilon, vectors, numV, d, res) == 0
-ret_code_t alg2(unsigned short  centroids_num,
-                unsigned short  max_iter,
+ret_code_t alg2(unsigned short  centroids_num, //Shai - make integer
+                unsigned short  max_iter, //Shai - make integer
                 double          epsilon,
                 double         *vectors_array,
-                unsigned short  vectors_num,
-                unsigned short  vector_dim,
+                unsigned short  vectors_num, //Shai - make integer
+                unsigned short  vector_dim, //Shai - make integer
                 double         *centroids_array)
 {
     info_4_argmin_t      *info_4_argmin = alloc_and_init_info_4_argmin(vectors_num);
@@ -97,7 +97,7 @@ ret_code_t alg2(unsigned short  centroids_num,
        return RET_CODE_FAILURE;
     }
 
-   print_all_vectors(vectors_array, vectors_num, vector_dim);
+   print_all_vectors(vectors_array, vectors_num, vector_dim); //Shai - earse
 
     while ((iter_ctr < max_iter) && (false == convergence_reached))
     {
