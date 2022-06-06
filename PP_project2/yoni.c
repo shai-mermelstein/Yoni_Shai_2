@@ -190,7 +190,7 @@ static info_4_convergence_t * alloc_and_init_info_4_convergence(unsigned short c
             info[i].convergence_reached = false;
          */
          memset(info, 0, array_size);
-         for(int i = 0; i < centroids_num; i++)
+         for(int i = 0; i < centroids_num; i++) //Shai - no decleration inside for loop
          {
             memset(sum_per_centroid, 0, sum_per_centroid_size);
             info[i].sum = sum_per_centroid + (i * vector_dim);
@@ -225,7 +225,7 @@ static double calc_distance(double *vector,double *centroid,unsigned short vecto
 {
    double dist = 0;
 
-   for(int i = 0;i < vector_dim;i++)
+   for(int i = 0;i < vector_dim;i++)  //Shai - no decleration inside for loop
    {
       dist += pow((vector[i]-centroid[i]),2);
    }
@@ -279,28 +279,28 @@ static bool update_centroids(
 {
    bool no_another_loop = true;
 
-   for(int i = 0; i < vectors_num ; i++)
+   for(int i = 0; i < vectors_num ; i++)  //Shai - no decleration inside for loop
    {
       unsigned short idx = info_4_argmin[i].centriod_idx;
       double *vector = get_element(vectors_array, i, vector_dim);
 
-      for(int j=0; j< vector_dim;j++)
+      for(int j=0; j< vector_dim;j++)  //Shai - no decleration inside for loop
       {
          info_4_convergence[idx].sum[j] += vector[j];
       }
       info_4_convergence[idx].cluster_size += 1;
    }
 
-   for (int i = 0; i < centroids_num ; i++)
+   for (int i = 0; i < centroids_num ; i++)  //Shai - no decleration inside for loop
    {
-      for (int j = 0; j < vector_dim ; j++)
+      for (int j = 0; j < vector_dim ; j++)  //Shai - no decleration inside for loop
       {
          info_4_convergence[i].sum[j] = info_4_convergence[i].sum[j]/info_4_convergence[i].cluster_size;
          /*print_all_vectors(centroids_array,centroids_num,vector_dim);*/
       }
    }
 
-   for (int i = 0;i < centroids_num ; i++)
+   for (int i = 0;i < centroids_num ; i++)  //Shai - no decleration inside for loop
    {
       double *centroid = get_element(centroids_array,i,vector_dim);
       double distance = calc_distance(info_4_convergence[i].sum, centroid, vector_dim);
@@ -364,10 +364,10 @@ print_all_vectors(
    unsigned short vectors_num, 
    unsigned short vector_dim)
 {
-   for(int i = 0; i < vectors_num; i++)
+   for(int i = 0; i < vectors_num; i++)  //Shai - no decleration inside for loop
    {
       printf("vector %d: ", i);
-      double *vector = get_element(vectors_array, i, vector_dim);
+      double *vector = get_element(vectors_array, i, vector_dim);  //Shai - no mixed declarations and code
       for (int d = 0; d < vector_dim; d++)
       {
          printf("%f ", vector[d]);
