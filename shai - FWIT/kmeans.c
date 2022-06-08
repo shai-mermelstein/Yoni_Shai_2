@@ -143,6 +143,9 @@ int kmeans(int K, int maxIter, double epsilon, double**data, int numV, int numC,
             if (sum >= epsilon) flag = true;
         }
     }
+
+    // printf("iter = %d\n", iter); //shai debug
+
     free2Darray(currSums);
     freeAndClear(sizes);
     

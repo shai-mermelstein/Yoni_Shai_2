@@ -149,6 +149,8 @@ ret_code_t alg2(int  centroids_num, //Shai - make integer
        iter_ctr++;
     }
 
+   //  printf("iter = %d\n", iter_ctr); //shai debug
+
     free_all_resources(info_4_argmin,
                        info_4_convergence);
 
