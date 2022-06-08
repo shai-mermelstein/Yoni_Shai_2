@@ -51,7 +51,6 @@ static double cFunc2(double *arr) {
     printf("I'm in C\n");
     double sum = 0;
     for(int i = 0; i < 4; i++) {
-        arr[i-1] /= sum;
         arr[i]++;
         printf("%d : %f\n", i, arr[i]);   
         sum += arr[i]; 
