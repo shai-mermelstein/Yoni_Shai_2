@@ -88,17 +88,18 @@ static bool update_centroids(
    info_4_convergence_t *info_4_convergence, 
    info_4_argmin_t      *info_4_argmin,
    double               *centroids_array, 
-   int        centroids_num, 
+   int                  centroids_num, 
    double               *vectors_array, 
-   int        vectors_num, 
-   int        vector_dim, 
-   double                epsilon);
+   int                  vectors_num, 
+   int                  vector_dim, 
+   double               epsilon);
 
-static void
-print_all_vectors(
+// static void
+/*print_all_vectors(
    double *vectors_array, 
    int vectors_num, 
    int vector_dim);
+*/
 
 //mykmeanssp.fit(k, max_iter, epsilon, vectors, numV, d, res) == 0
 ret_code_t alg2(int  centroids_num, //Shai - make integer
@@ -116,6 +117,8 @@ ret_code_t alg2(int  centroids_num, //Shai - make integer
     double                distance;
     int        vector_idx, centroid_idx, iter_ctr = 0;
     bool                  convergence_reached = false;
+    
+
 
     if ((NULL == info_4_argmin) || 
         (NULL == info_4_convergence))
@@ -201,7 +204,7 @@ static info_4_argmin_t * alloc_and_init_info_4_argmin(int vectors_num)
  */
 static info_4_convergence_t * alloc_and_init_info_4_convergence(int centroids_num, int vector_dim)
 {
-   
+   int   i;
    size_t array_size = sizeof(info_4_convergence_t) * centroids_num;
    info_4_convergence_t * info = (info_4_convergence_t *) malloc(array_size);
    info = (info_4_convergence_t *) malloc(array_size);
@@ -218,7 +221,7 @@ static info_4_convergence_t * alloc_and_init_info_4_convergence(int centroids_nu
             info[i].convergence_reached = false;
          */
          memset(info, 0, array_size);
-         for(int i = 0; i < centroids_num; i++) //Shai - no decleration inside for loop
+         for(i = 0; i < centroids_num; i++) //Shai - no decleration inside for loop
          {
             memset(sum_per_centroid, 0, sum_per_centroid_size);
             info[i].sum = sum_per_centroid + (i * vector_dim);
@@ -250,15 +253,16 @@ static void free_all_resources(info_4_argmin_t *info_4_argmin, info_4_convergenc
 }
 
 static double calc_distance(double *vector,double *centroid,int vector_dim)
-{
+{  
+   int i;
    double dist = 0;
 
-   for(int i = 0;i < vector_dim;i++)  //Shai - no decleration inside for loop
+   for(i = 0;i < vector_dim;i++)  //Shai - no decleration inside for loop
    {
       dist += pow((vector[i]-centroid[i]),2);
       // dist += (vector[i]-centroid[i])*(vector[i]-centroid[i]); //Shai mark
    }
-   // dist = sqrt(dist); //Shai mark
+   dist = sqrt(dist); //Shai mark
 
    return dist;
 }
@@ -306,30 +310,31 @@ static bool update_centroids(
    int        vector_dim, 
    double                epsilon)
 {
+   int i,j,idx;
    bool no_another_loop = true;
 
-   for(int i = 0; i < vectors_num ; i++)  //Shai - no decleration inside for loop
+   for(i = 0; i < vectors_num ; i++)  //Shai - no decleration inside for loop
    {
-      int idx = info_4_argmin[i].centriod_idx;
+      idx = info_4_argmin[i].centriod_idx;
       double *vector = get_element(vectors_array, i, vector_dim);
 
-      for(int j=0; j< vector_dim;j++)  //Shai - no decleration inside for loop
+      for(j=0; j< vector_dim;j++)  //Shai - no decleration inside for loop
       {
          info_4_convergence[idx].sum[j] += vector[j];
       }
       info_4_convergence[idx].cluster_size += 1;
    }
 
-   for (int i = 0; i < centroids_num ; i++)  //Shai - no decleration inside for loop
+   for (i = 0; i < centroids_num ; i++)  //Shai - no decleration inside for loop
    {
-      for (int j = 0; j < vector_dim ; j++)  //Shai - no decleration inside for loop
+      for (j = 0; j < vector_dim ; j++)  //Shai - no decleration inside for loop
       {
          info_4_convergence[i].sum[j] = info_4_convergence[i].sum[j]/info_4_convergence[i].cluster_size;
          /*print_all_vectors(centroids_array,centroids_num,vector_dim);*/
       }
    }
 
-   for (int i = 0;i < centroids_num ; i++)  //Shai - no decleration inside for loop
+   for (i = 0;i < centroids_num ; i++)  //Shai - no decleration inside for loop
    {
       double *centroid = get_element(centroids_array,i,vector_dim);
       double distance = calc_distance(info_4_convergence[i].sum, centroid, vector_dim);
@@ -366,6 +371,7 @@ static bool update_centroids(
                 int  vector_dim,
                 double         *centroids_array
 */
+/*
 int main(void)
 {
    int  centroids_num = 2;
@@ -386,7 +392,8 @@ int main(void)
 
    // printf("%f, %f\r\n", centroids_array[0], centroids_array[1]);  //Shai erase
 }
-
+*/
+/*
 static void
 print_all_vectors(
    double *vectors_array, 
@@ -404,7 +411,7 @@ print_all_vectors(
       printf("\r\n");
    }
 }
-
+*/
 //Shai code
 PyMODINIT_FUNC PyInit_mykmeanssp() {
     import_array()
